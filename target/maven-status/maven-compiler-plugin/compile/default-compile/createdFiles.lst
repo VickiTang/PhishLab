@@ -1,0 +1,15 @@
+com/phishlab/battle/BattleResult.class
+com/phishlab/detector/SuspiciousTldChecker.class
+com/phishlab/hash/HashBlocklist.class
+com/phishlab/hash/HashUtils.class
+com/phishlab/generator/PhishingDomainGenerator.class
+com/phishlab/battle/ChallengeTest$Challenge.class
+com/phishlab/battle/BattleRunner.class
+com/phishlab/detector/RiskLevel.class
+com/phishlab/battle/ChallengeTest.class
+com/phishlab/hash/ScanResult.class
+com/phishlab/util/LevenshteinCalculator.class
+com/phishlab/detector/BrandKeywordMatcher.class
+com/phishlab/PhishLabApp.class
+com/phishlab/detector/DomainCheckService.class
+com/phishlab/detector/DetectionResult.class
