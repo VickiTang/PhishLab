@@ -1,0 +1,74 @@
+[
+  {
+    "id": "url-001",
+    "isPhishing": true,
+    "fromName": "Amazon カスタマーサービス",
+    "fromAddress": "service@arnazon.co.jp",
+    "subject": "【重要】お客様のアカウントが一時停止されました",
+    "body": "お客様\n\nお客様のアカウントに不審なログインが検出されました。\n24時間以内に下記URLよりアカウントを確認してください。\n\n確認リンク: https://arnazon.co.jp/verify/login\n\n確認されない場合、アカウントは永久停止されます。\n\nAmazon サポートチーム"
+  },
+  {
+    "id": "url-002",
+    "isPhishing": true,
+    "fromName": "PayPal セキュリティ",
+    "fromAddress": "alert@paypal-security-jp.com",
+    "subject": "【緊急】不審な取引が検出されました",
+    "body": "お客様\n\n本日 02:34 に米国からの不審なログインが確認されました。\n心当たりがない場合は、以下のリンクより取引をキャンセルしてください。\n\nhttps://paypal-security-jp.com/cancel-transaction\n\n至急ご対応ください。\n\nPayPal セキュリティチーム"
+  },
+  {
+    "id": "url-003",
+    "isPhishing": true,
+    "fromName": "楽天市場",
+    "fromAddress": "info@rakuten-promo.tk",
+    "subject": "【限定】1万円分のポイントプレゼント",
+    "body": "楽天会員様\n\n日頃のご利用に感謝し、抽選で1万円分のポイントをプレゼントいたします。\n\n今すぐお受け取りください: https://rakuten-promo.tk/claim\n\n※本日中の応募が必要です。\n\n楽天市場 プロモーション部"
+  },
+  {
+    "id": "url-004",
+    "isPhishing": true,
+    "fromName": "三井住友銀行",
+    "fromAddress": "no-reply@smbc-direct-jp.com",
+    "subject": "【重要】お客様のワンタイムパスワードについて",
+    "body": "お客様各位\n\nセキュリティ強化のため、ワンタイムパスワードの再設定をお願いしております。\n\n下記URLより手続きを完了してください:\nhttps://smbc-direct-jp.com/auth/reset\n\n※48時間以内に手続きされない場合、口座が凍結される可能性があります。\n\n三井住友銀行 セキュリティセンター"
+  },
+  {
+    "id": "url-005",
+    "isPhishing": true,
+    "fromName": "Microsoft アカウント",
+    "fromAddress": "account-security@microsft-login.xyz",
+    "subject": "【警告】異常なサインイン試行を検出",
+    "body": "お客様\n\n本日 03:12 に海外からの異常なサインイン試行を検出しました。\n\nお客様ご本人による操作でない場合は、直ちに下記からパスワードを変更してください:\nhttps://microsft-login.xyz/account/secure\n\nアカウント保護チーム\nMicrosoft"
+  },
+  {
+    "id": "url-006",
+    "isPhishing": true,
+    "fromName": "メルカリ事務局",
+    "fromAddress": "support@mercari-jp-account.top",
+    "subject": "【要対応】出品商品の情報確認のお願い",
+    "body": "メルカリをご利用のお客様\n\n出品されている商品について、本人確認が完了していないものがございます。\n\nお手数ですが、下記URLより本人確認情報をご入力ください:\nhttps://mercari-jp-account.top/verify\n\n3日以内に確認が取れない場合、商品が削除されます。\n\nメルカリ事務局"
+  },
+  {
+    "id": "url-007",
+    "isPhishing": true,
+    "fromName": "ヤマト運輸",
+    "fromAddress": "delivery@yamato-jp.ml",
+    "subject": "【お荷物のお届け】不在通知のお知らせ",
+    "body": "お客様\n\nお荷物のお届けに伺いましたが、ご不在のため持ち帰りました。\n\n再配達のご依頼は下記URLより承ります:\nhttps://yamato-jp.ml/redelivery\n\n※24時間以内のご対応をお願いいたします。\n\nヤマト運輸"
+  },
+  {
+    "id": "url-008",
+    "isPhishing": true,
+    "fromName": "JCBカード",
+    "fromAddress": "info@jcb-securecheck.click",
+    "subject": "【重要】カード利用確認のお願い",
+    "body": "JCBカード会員様\n\nお客様のカードで通常と異なるご利用が検出されました。\n\n下記URLよりご本人様確認をお願いいたします:\nhttps://jcb-securecheck.click/confirm\n\n※確認できない場合、カードのご利用を一時停止させていただきます。\n\nJCBカード セキュリティ部"
+  },
+  {
+    "id": "url-009",
+    "isPhishing": true,
+    "fromName": "Google アカウント",
+    "fromAddress": "no-reply@google-account-verify.work",
+    "subject": "【セキュリティアラート】新しいデバイスからのログイン",
+    "body": "お客様\n\n新しいデバイスからお客様のGoogleアカウントへのログインが検出されました。\n\nお客様ご本人による操作でない場合は、下記URLよりアカウントを保護してください:\nhttps://google-account-verify.work/secure\n\nGoogle アカウントチーム"
+  }
+]

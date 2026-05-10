@@ -1,0 +1,11 @@
+# Known phishing URLs (synthetic data for research)
+# Format: SHA-256 hash of full URL (lowercase)
+
+# 这些是几个 well-known 钓鱼 URL 的哈希示例
+# 实际生成时由程序计算
+https://amazon-security-jp.tk/login
+https://paypal-verify.click/auth
+https://smbc-secure.xyz/account
+https://jcb-card-check.work/confirm
+https://mercari-jp-verify.top/login
+

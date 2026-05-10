@@ -16,7 +16,9 @@ public class BrandKeywordMatcher {
         this.brandKeywords = new HashSet<>(Arrays.asList(
             "amazon", "google", "microsoft", "apple", "netflix", "paypal",
             "github", "rakuten", "yahoo", "line", "twitter", "facebook",
-            "mercari", "smbc", "mufg", "jcb", "visa", "mastercard"
+            "mercari", "smbc", "mufg", "jcb", "visa", "mastercard",
+            "yamato", "sagawa", "japanpost", "ana", "jal", "docomo",
+            "softbank", "au", "yucho", "mizuho", "resona"
         ));
 
         // 2. 初始化真实域名映射
@@ -39,6 +41,19 @@ public class BrandKeywordMatcher {
         officialDomainsMap.put("jcb", new HashSet<>(Arrays.asList("jcb.co.jp")));
         officialDomainsMap.put("visa", new HashSet<>(Arrays.asList("visa.com", "visa.co.jp")));
         officialDomainsMap.put("mastercard", new HashSet<>(Arrays.asList("mastercard.com")));
+
+        // 日本ブランド追加
+        officialDomainsMap.put("yamato", new HashSet<>(Arrays.asList("kuronekoyamato.co.jp")));
+        officialDomainsMap.put("sagawa", new HashSet<>(Arrays.asList("sagawa-exp.co.jp")));
+        officialDomainsMap.put("japanpost", new HashSet<>(Arrays.asList("post.japanpost.jp", "japanpost.jp")));
+        officialDomainsMap.put("ana", new HashSet<>(Arrays.asList("ana.co.jp")));
+        officialDomainsMap.put("jal", new HashSet<>(Arrays.asList("jal.co.jp")));
+        officialDomainsMap.put("docomo", new HashSet<>(Arrays.asList("docomo.ne.jp", "nttdocomo.co.jp")));
+        officialDomainsMap.put("softbank", new HashSet<>(Arrays.asList("softbank.jp")));
+        officialDomainsMap.put("au", new HashSet<>(Arrays.asList("au.com", "kddi.com")));
+        officialDomainsMap.put("yucho", new HashSet<>(Arrays.asList("jp-bank.japanpost.jp")));
+        officialDomainsMap.put("mizuho", new HashSet<>(Arrays.asList("mizuhobank.co.jp")));
+        officialDomainsMap.put("resona", new HashSet<>(Arrays.asList("resonabank.co.jp")));
     }
 
     /**

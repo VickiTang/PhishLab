@@ -10,11 +10,13 @@ public class DomainCheckService {
     private final List<String> trustedDomains;
     private final BrandKeywordMatcher brandMatcher;
     private final SuspiciousTldChecker tldChecker;
+    private final HomoglyphLetterSwapChecker homoglyphChecker;
 
     public DomainCheckService(List<String> trusted) {
         this.trustedDomains = trusted;
         this.brandMatcher = new BrandKeywordMatcher();
         this.tldChecker = new SuspiciousTldChecker();
+        this.homoglyphChecker = HomoglyphLetterSwapChecker.withDefaults();
     }
 
     public static DomainCheckService withDefaultTrustedDomains() {
@@ -39,6 +41,7 @@ public class DomainCheckService {
         results.add(checkByLevenshtein(target));
         results.add(brandMatcher.check(target));
         results.add(tldChecker.check(target));
+        results.add(homoglyphChecker.check(target));
 
         // 1. 取最高风险（RED > YELLOW > GREEN）
         RiskLevel finalRisk = RiskLevel.GREEN;
