@@ -11,6 +11,7 @@ com/phishlab/detector/HomoglyphLetterSwapChecker.class
 com/phishlab/hash/ScanResult.class
 com/phishlab/util/LevenshteinCalculator.class
 com/phishlab/detector/BrandKeywordMatcher.class
+com/phishlab/detector/DomainEconomicRiskService.class
 com/phishlab/generator/UrlPhishingEmailGenerator$BrandInfo.class
 com/phishlab/detector/DetectionResult.class
 com/phishlab/battle/BattleResult.class

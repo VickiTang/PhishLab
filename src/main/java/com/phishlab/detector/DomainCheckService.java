@@ -9,62 +9,67 @@ import java.util.Collections;
 public class DomainCheckService {
     private final List<String> trustedDomains;
     private final BrandKeywordMatcher brandMatcher;
-    private final SuspiciousTldChecker tldChecker;
+    private final DomainEconomicRiskService economicRiskService;
     private final HomoglyphLetterSwapChecker homoglyphChecker;
+    private final SuspiciousTldChecker suspiciousTldChecker;
+    private final UrlBlocklistService urlBlocklistService;
 
     public DomainCheckService(List<String> trusted) {
         this.trustedDomains = trusted;
         this.brandMatcher = new BrandKeywordMatcher();
-        this.tldChecker = new SuspiciousTldChecker();
+        this.economicRiskService = new DomainEconomicRiskService();
         this.homoglyphChecker = HomoglyphLetterSwapChecker.withDefaults();
+        this.suspiciousTldChecker = new SuspiciousTldChecker();
+        this.urlBlocklistService = UrlBlocklistService.fromResources();
     }
 
     public static DomainCheckService withDefaultTrustedDomains() {
         return new DomainCheckService(Arrays.asList(
             "amazon.co.jp", "amazon.com", "google.com", "microsoft.com",
             "apple.com", "netflix.com", "paypal.com", "github.com",
-            "rakuten.co.jp", "yahoo.co.jp", "line.me", "twitter.com", "facebook.com"
+            "rakuten.co.jp", "yahoo.co.jp", "line.me", "twitter.com", "facebook.com",
+            "smbc.co.jp", "mufg.jp", "jcb.co.jp", "kuronekoyamato.co.jp"
         ));
     }
 
     public DetectionResult check(String domain) {
+        if (domain == null) return new DetectionResult("null", RiskLevel.GREEN, 0, List.of("ドメインが空です"));
         String target = domain.trim().toLowerCase();
 
-        // Whitelist is a special case: immediate return
+        // 1. 白名单是最高优先级
         if (trustedDomains.contains(target)) {
             return new DetectionResult(target, RiskLevel.GREEN, 0, 
-                Collections.singletonList("このドメインは信頼ホワイトリストに含まれます"));
+                Collections.singletonList("信頼済みドメインです"));
         }
 
-        // 收集所有策略的结果
+        // 2. 收集所有 6 个检测器的结果
         List<DetectionResult> results = new ArrayList<>();
+        results.add(economicRiskService.check(target));
         results.add(checkByLevenshtein(target));
-        results.add(brandMatcher.check(target));
-        results.add(tldChecker.check(target));
         results.add(homoglyphChecker.check(target));
+        results.add(brandMatcher.check(target));
+        results.add(suspiciousTldChecker.check(target));
+        results.add(urlBlocklistService.checkDomain(target));
 
-        // 1. 取最高风险（RED > YELLOW > GREEN）
+        // 3. 综合判定逻辑 (取最高分数和最高风险)
         RiskLevel finalRisk = RiskLevel.GREEN;
-        for (DetectionResult res : results) {
-            if (res.riskLevel() == RiskLevel.RED) {
-                finalRisk = RiskLevel.RED;
-                break; // RED is highest, can stop
-            } else if (res.riskLevel() == RiskLevel.YELLOW) {
-                finalRisk = RiskLevel.YELLOW;
-            }
-        }
-
-        // 2. 合并所有非 GREEN 的判定理由
-        List<String> allReasons = new ArrayList<>();
         int maxScore = 0;
+        List<String> allReasons = new ArrayList<>();
+
         for (DetectionResult res : results) {
+            if (res.score() > maxScore) {
+                maxScore = res.score();
+            }
             if (res.riskLevel() != RiskLevel.GREEN) {
                 allReasons.addAll(res.reasons());
-                // 3. 取最高分数
-                if (res.score() > maxScore) {
-                    maxScore = res.score();
-                }
             }
+        }
+
+        // 风险分级映射
+        if (maxScore >= 75) {
+            finalRisk = RiskLevel.RED;
+        } else if (maxScore >= 40) {
+            finalRisk = RiskLevel.YELLOW;
         }
 
         if (allReasons.isEmpty()) {
@@ -100,7 +105,7 @@ public class DomainCheckService {
         } else if (minDistance == 3) {
             level = RiskLevel.YELLOW;
             score = 40;
-            reasons.add(closestDomain + " と類似（編集距离=3）");
+            reasons.add(closestDomain + " と类似（编辑距离=3）");
         } else {
             level = RiskLevel.GREEN;
             score = 0;
@@ -110,24 +115,26 @@ public class DomainCheckService {
     }
 
     public static void demo() {
-        System.out.println("===== Domain Check Service (Multi-Strategy) デモ =====");
+        System.out.println("===== Domain Check Service (Bruce Schneier Edition - Full Arsenal) デモ =====");
         DomainCheckService service = withDefaultTrustedDomains();
-        System.out.println("ホワイトリスト読込済: " + service.trustedDomains.size() + " 件の信頼ブランド");
+        System.out.println("信頼済みブランド数: " + service.trustedDomains.size());
         System.out.println();
 
-        // 保持原来的 5 条测试用例
         String[] testDomains = {
-            "amazon.co.jp",
-            "arnazon.co.jp",
-            "amazom.co.jp",
-            "amzaon.co.jp",
-            "example.org"
+            "amazon.co.jp",                  // 信頼済み (GREEN)
+            "amazom.co.jp",                  // ホモグリフ/編集距離 (RED)
+            "amazon-verify-login.tk",        // 経済学的リスク: ブランド寄生 + 廉価TLD (RED)
+            "m1crosoft.com",                 // Homoglyph catch (RED)
+            "smbc.co.jp",                    // 合法 (GREEN)
+            "amaz0n-jp.tk",                  // 多重攻撃测试 (RED)
+            "example.org"                    // 正常 (GREEN)
         };
 
         for (int i = 0; i < testDomains.length; i++) {
             System.out.println("テスト" + (i + 1) + ": " + testDomains[i]);
-            System.out.print(service.check(testDomains[i]).toString());
-            System.out.println();
+            DetectionResult result = service.check(testDomains[i]);
+            System.out.println(result.toString());
+            System.out.println("--------------------------------------------------");
         }
     }
 

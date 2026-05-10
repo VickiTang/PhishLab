@@ -7,6 +7,7 @@
 /Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/BrandKeywordMatcher.java
 /Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/DetectionResult.java
 /Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/DomainCheckService.java
+/Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/DomainEconomicRiskService.java
 /Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/HomoglyphLetterSwapChecker.java
 /Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/RiskLevel.java
 /Users/kksweet/Projects/phishlab/src/main/java/com/phishlab/detector/SuspiciousTldChecker.java
