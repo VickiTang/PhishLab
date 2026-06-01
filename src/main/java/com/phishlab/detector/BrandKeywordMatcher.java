@@ -4,15 +4,19 @@ import java.util.*;
 
 /**
  * BrandKeywordMatcher
- * 品牌名被嵌入到非品牌域名中的攻击 (Brand Impersonation) 检测器
+ * Detects brand impersonation attacks where brand names are embedded in non-official domains.
  */
+import java.io.IOException;
+import java.io.InputStream;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.stream.Collectors;
+
 public class BrandKeywordMatcher {
 
     private final Set<String> brandKeywords;
     private final Map<String, Set<String>> officialDomainsMap;
 
     public BrandKeywordMatcher() {
-        // 1. 初始化品牌关键词列表
         this.brandKeywords = new HashSet<>(Arrays.asList(
             "amazon", "google", "microsoft", "apple", "netflix", "paypal",
             "github", "rakuten", "yahoo", "line", "twitter", "facebook",
@@ -21,7 +25,6 @@ public class BrandKeywordMatcher {
             "softbank", "au", "yucho", "mizuho", "resona"
         ));
 
-        // 2. 初始化真实域名映射
         this.officialDomainsMap = new HashMap<>();
         officialDomainsMap.put("amazon", new HashSet<>(Arrays.asList("amazon.co.jp", "amazon.com")));
         officialDomainsMap.put("google", new HashSet<>(Arrays.asList("google.com", "google.co.jp")));
@@ -42,7 +45,7 @@ public class BrandKeywordMatcher {
         officialDomainsMap.put("visa", new HashSet<>(Arrays.asList("visa.com", "visa.co.jp")));
         officialDomainsMap.put("mastercard", new HashSet<>(Arrays.asList("mastercard.com")));
 
-        // 日本ブランド追加
+        // Japanese brands
         officialDomainsMap.put("yamato", new HashSet<>(Arrays.asList("kuronekoyamato.co.jp")));
         officialDomainsMap.put("sagawa", new HashSet<>(Arrays.asList("sagawa-exp.co.jp")));
         officialDomainsMap.put("japanpost", new HashSet<>(Arrays.asList("post.japanpost.jp", "japanpost.jp")));
@@ -57,75 +60,71 @@ public class BrandKeywordMatcher {
     }
 
     /**
-     * 检测域名是否包含品牌关键词且非正规域名
+     * Checks if a domain contains a brand keyword and is not an official domain.
+     * @param domain The domain to check.
+     * @return A DetectionResult indicating the risk level.
      */
     public DetectionResult check(String domain) {
         if (domain == null) {
-            return new DetectionResult("null", RiskLevel.GREEN, 0, Collections.singletonList("ドメインが空です"));
+            return new DetectionResult("null", RiskLevel.GREEN, 0, Collections.singletonList("Domain is null."));
         }
 
         String targetDomain = domain.toLowerCase().trim();
 
         for (String brand : brandKeywords) {
-            // 如果域名中包含品牌名
             if (targetDomain.contains(brand)) {
                 Set<String> officialDomains = officialDomainsMap.get(brand);
                 
-                // 检查是否是该品牌的正规域名
                 if (officialDomains != null && officialDomains.contains(targetDomain)) {
-                    // 如果是正规域名，继续检查其他品牌（防止例如某个品牌名恰好包含在另一个品牌域名中）
                     continue;
                 }
 
-                // 命中：包含品牌名但不是正规域名
                 return new DetectionResult(
                     domain,
                     RiskLevel.RED,
                     85,
-                    Collections.singletonList("ブランド名 " + brand + " が含まれているが、正規ドメインではない（疑似 brand impersonation 攻撃）")
+                    Collections.singletonList("Brand name '" + brand + "' found, but not an official domain (suspected brand impersonation).")
                 );
             }
         }
 
-        // 未命中
         return new DetectionResult(
             domain,
             RiskLevel.GREEN,
             0,
-            Collections.singletonList("ブランド名の埋め込みは検出されません")
+            Collections.singletonList("No brand keyword embedding detected.")
         );
     }
+public static void main(String[] args) {
+    Logger logger = LoggerFactory.getLogger(BrandKeywordMatcher.class);
+    BrandKeywordMatcher matcher = new BrandKeywordMatcher();
 
-    public static void main(String[] args) {
-        BrandKeywordMatcher matcher = new BrandKeywordMatcher();
+    logger.info("===== Brand Keyword Matcher Demo =====");
+    logger.info("");
 
-        System.out.println("===== Brand Keyword Matcher デモ =====");
-        System.out.println();
+    String[] testDomains = {
+        "amazon-security.com",
+        "amazon.co.jp",
+        "secure-paypal-login.net",
+        "example.org"
+    };
 
-        String[] testDomains = {
-            "amazon-security.com",
-            "amazon.co.jp",
-            "secure-paypal-login.net",
-            "example.org"
-        };
+    int count = 1;
+    for (String domain : testDomains) {
+        DetectionResult result = matcher.check(domain);
+        logger.info("Test {}: {}", count, domain);
 
-        int count = 1;
-        for (String domain : testDomains) {
-            DetectionResult result = matcher.check(domain);
-            System.out.println("テスト" + count + ": " + domain);
-            
-            String status = result.riskLevel() == RiskLevel.RED ? "⛔ RED 高リスク" : "✓ GREEN 低リスク";
-            System.out.println("  検出結果: " + status + " (Score: " + result.score() + ")");
-            
-            String reason = result.reasons().isEmpty() ? "" : result.reasons().get(0);
-            if (domain.equals("amazon.co.jp")) {
-                // 特殊处理演示输出，符合用户要求的提示
-                System.out.println("  判定理由: ブランド名の埋め込みは検出されません（正規ドメイン）");
-            } else {
-                System.out.println("  判定理由: " + reason);
-            }
-            System.out.println();
-            count++;
+        String status = result.riskLevel() == RiskLevel.RED ? "⛔ RED High Risk" : "✓ GREEN Low Risk";
+        logger.info("  Detection Result: {} (Score: {})", status, result.score());
+
+        String reason = result.reasons().isEmpty() ? "" : result.reasons().get(0);
+        if (domain.equals("amazon.co.jp")) {
+            logger.info("  Reason: No brand keyword embedding detected (official domain).");
+        } else {
+            logger.info("  Reason: {}", reason);
         }
+        logger.info("");
+        count++;
     }
+}
 }

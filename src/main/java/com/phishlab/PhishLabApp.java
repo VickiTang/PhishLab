@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Collections;
 
 public class PhishLabApp {
+    private static final Logger logger = LoggerFactory.getLogger(PhishLabApp.class);
     public static void main(String[] args) {
         if (args.length == 0) {
             runDefaultDemo();
@@ -35,81 +36,81 @@ public class PhishLabApp {
     }
 
     private static void printHelp() {
-        System.out.println("使用方法:");
-        System.out.println("  java -jar phishlab.jar          全モジュールデモ");
-        System.out.println("  java -jar phishlab.jar demo     プレゼン用デモ");
-        System.out.println("  java -jar phishlab.jar web      Webブラウザでデモ");
-        System.out.println("  java -jar phishlab.jar help     ヘルプ表示");
+        logger.info("使用方法:");
+        logger.info("  java -jar phishlab.jar          全モジュールデモ");
+        logger.info("  java -jar phishlab.jar demo     プレゼン用デモ");
+        logger.info("  java -jar phishlab.jar web      Webブラウザでデモ");
+        logger.info("  java -jar phishlab.jar help     ヘルプ表示");
     }
 
     private static void runDefaultDemo() {
-        System.out.println("PhishLab v0.1 - Phishing Analysis Lab");
-        System.out.println();
+        logger.info("PhishLab v0.1 - Phishing Analysis Lab");
+        logger.info("");
 
         // [Generator Demo]
         PhishingDomainGenerator generator = new PhishingDomainGenerator();
         String target = "amazon.co.jp";
         List<String> variants = generator.typoSquat(target);
 
-        System.out.println("[Generator Demo]");
-        System.out.println("Target: " + target);
-        System.out.println();
-        System.out.println("Generated phishing variants:");
+        logger.info("[Generator Demo]");
+        logger.info("Target: {}", target);
+        logger.info("");
+        logger.info("Generated phishing variants:");
         for (int i = 0; i < variants.size(); i++) {
-            System.out.println("  " + (i + 1) + ". " + variants.get(i));
+            logger.info("  {}. {}", (i + 1), variants.get(i));
         }
-        System.out.println();
+        logger.info("");
 
         // [Hash Demo]
-        System.out.println("[Hash Demo]");
+        logger.info("[Hash Demo]");
         HashUtils.demo();
-        System.out.println();
+        logger.info("");
 
         // [Blocklist Demo]
-        System.out.println("[Blocklist Demo]");
+        logger.info("[Blocklist Demo]");
         HashBlocklist.demo();
-        System.out.println();
+        logger.info("");
 
         // [Detector Demo]
-        System.out.println("[Detector Demo]");
+        logger.info("[Detector Demo]");
         DomainCheckService.demo();
-        System.out.println();
+        logger.info("");
 
         // [Battle Demo]
-        System.out.println("[Battle Demo]");
+        logger.info("[Battle Demo]");
         BattleRunner runner = BattleRunner.withDefaults();
         BattleResult result = runner.run(target, 4);
         runner.printReport(result, target);
-        System.out.println();
+        logger.info("");
 
         // [BEC Demo]
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║  BEC (Business Email Compromise) Demo  ║");
-        System.out.println("╚════════════════════════════════════════╝");
-        System.out.println();
-        System.out.println("📌 攻撃者は社長/部長なりすまして偽メールを送信。");
-        System.out.println("   防御者は複数の指標を組み合わせて検出する。");
-        System.out.println();
+        logger.info("╔════════════════════════════════════════╗");
+        logger.info("║  BEC (Business Email Compromise) Demo  ║");
+        logger.info("╚════════════════════════════════════════╝");
+        logger.info("");
+        logger.info("📌 攻撃者は社長/部長なりすまして偽メールを送信。");
+        logger.info("   防御者は複数の指標を組み合わせて検出する。");
+        logger.info("");
 
         BecEmailGenerator becGenerator = new BecEmailGenerator(42);
         BecEmail becEmail = becGenerator.generate();
         BecPatternService becService = BecPatternService.withDefaults();
 
-        System.out.println("─────── 生成された BEC メール ───────");
-        System.out.println();
-        System.out.println("差出人: " + becEmail.fromName() + " <" + becEmail.fullEmail() + ">");
-        System.out.println("件名: " + becEmail.subject());
-        System.out.println(becEmail.body());
-        System.out.println();
+        logger.info("─────── 生成された BEC メール ───────");
+        logger.info("");
+        logger.info("差出人: {} <{}>", becEmail.fromName(), becEmail.fullEmail());
+        logger.info("件名: {}", becEmail.subject());
+        logger.info(becEmail.body());
+        logger.info("");
 
-        System.out.println("─────── 検出結果 ───────");
-        System.out.println();
+        logger.info("─────── 検出結果 ───────");
+        logger.info("");
         DetectionResult becResult = becService.check(becEmail);
         printDetectionResult(becResult);
-        System.out.println();
+        logger.info("");
 
-        System.out.println("─────── 对比: 正常メール ───────");
-        System.out.println();
+        logger.info("─────── 对比: 正常メール ───────");
+        logger.info("");
         BecEmail normalEmail = new BecEmail(
             "明日の会議資料について",
             "山田課長",
@@ -119,23 +120,25 @@ public class PhishLabApp {
             "課長",
             Collections.emptyList()
         );
-        System.out.println("差出人: " + normalEmail.fromName() + " <" + normalEmail.fullEmail() + ">");
-        System.out.println("件名: " + normalEmail.subject());
-        System.out.println();
+        logger.info("差出人: {} <{}>", normalEmail.fromName(), normalEmail.fullEmail());
+        logger.info("件名: {}", normalEmail.subject());
+        logger.info("");
         
         DetectionResult normalResult = becService.check(normalEmail);
         printDetectionResult(normalResult);
-        System.out.println();
-        System.out.println("💡 BEC 攻撃と正常メールが正確に区別された。");
+        logger.info("");
+        logger.info("💡 BEC 攻撃と正常メールが正確に区別された。");
     }
 
     private static void printDetectionResult(DetectionResult result) {
-        System.out.println("📊 検出結果: " + result.riskLevel().getIcon() + " " + 
-                           result.riskLevel().name() + " " + result.riskLevel().getLabel() + 
-                           " (Score: " + result.score() + "/100)");
-        System.out.println("📋 判定理由:");
+        logger.info("📊 検出結果: {} {} {} (Score: {}/100)", 
+                           result.riskLevel().getIcon(), 
+                           result.riskLevel().name(), 
+                           result.riskLevel().getLabel(), 
+                           result.score());
+        logger.info("📋 判定理由:");
         for (String reason : result.reasons()) {
-            System.out.println("  - " + reason);
+            logger.info("  - {}", reason);
         }
     }
 }

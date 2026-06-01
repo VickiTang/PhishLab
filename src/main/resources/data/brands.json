@@ -1,0 +1,40 @@
+{
+  "brandKeywords": [
+    "amazon", "google", "microsoft", "apple", "netflix", "paypal",
+    "github", "rakuten", "yahoo", "line", "twitter", "facebook",
+    "mercari", "smbc", "mufg", "jcb", "visa", "mastercard",
+    "yamato", "sagawa", "japanpost", "ana", "jal", "docomo",
+    "softbank", "au", "yucho", "mizuho", "resona"
+  ],
+  "officialDomains": {
+    "amazon": ["amazon.co.jp", "amazon.com"],
+    "google": ["google.com", "google.co.jp"],
+    "microsoft": ["microsoft.com"],
+    "apple": ["apple.com"],
+    "netflix": ["netflix.com"],
+    "paypal": ["paypal.com"],
+    "github": ["github.com"],
+    "rakuten": ["rakuten.co.jp"],
+    "yahoo": ["yahoo.co.jp", "yahoo.com"],
+    "line": ["line.me"],
+    "twitter": ["twitter.com"],
+    "facebook": ["facebook.com"],
+    "mercari": ["mercari.com", "mercari.jp"],
+    "smbc": ["smbc.co.jp"],
+    "mufg": ["mufg.jp", "bk.mufg.jp"],
+    "jcb": ["jcb.co.jp"],
+    "visa": ["visa.com", "visa.co.jp"],
+    "mastercard": ["mastercard.com"],
+    "yamato": ["kuronekoyamato.co.jp"],
+    "sagawa": ["sagawa-exp.co.jp"],
+    "japanpost": ["post.japanpost.jp", "japanpost.jp"],
+    "ana": ["ana.co.jp"],
+    "jal": ["jal.co.jp"],
+    "docomo": ["docomo.ne.jp", "nttdocomo.co.jp"],
+    "softbank": ["softbank.jp"],
+    "au": ["au.com", "kddi.com"],
+    "yucho": ["jp-bank.japanpost.jp"],
+    "mizuho": ["mizuhobank.co.jp"],
+    "resona": ["resonabank.co.jp"]
+  }
+}
