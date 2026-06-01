@@ -10,12 +10,6 @@
 
 ---
 
-## 📸 スクリーンショット
-![Web UI Simulator Placeholder](https://via.placeholder.com/800x450.png?text=PhishLab+Inbox+Simulator+UI)
-*（シミュレートされた受信トレイで、メールをクリックするとリアルタイムで5つの検出器がリスクを判定します）*
-
----
-
 ## 🚀 クイックスタート
 
 以下の3ステップで、ローカル環境でシミュレーターを起動できます。
